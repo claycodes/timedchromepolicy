@@ -1,0 +1,11 @@
+{
+  "dependencies": {
+    "dotenv": "^14.3.2",
+    "gulp": "^4.0.2",
+    "gulp-clean": "^0.4.0",
+    "gulp-inject-string": "^1.1.2"
+  },
+  "devDependencies": {
+    "gulp-util": "^3.0.8"
+  }
+}
