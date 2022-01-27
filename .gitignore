@@ -74,4 +74,15 @@ client/timedchromepolicy/node_modules
 .clasp.json
 
 #gulp folders
-deploy
+/deploy
+
+#angular
+/client/.angular/cache
+/client/.sass-cache
+/client/connect.lock
+/client/coverage
+/client/libpeerconnection.log
+/client/npm-debug.log
+/client/yarn-error.log
+/client/testem.log
+/client/typings
