@@ -77,12 +77,12 @@ client/timedchromepolicy/node_modules
 /deploy
 
 #angular
-client/.angular/cache
-client/.sass-cache
-client/connect.lock
-client/coverage
-client/libpeerconnection.log
-client/npm-debug.log
-client/yarn-error.log
-client/testem.log
-client/typings
+client/timedchromepolicy/.angular/cache
+client/timedchromepolicy/.sass-cache
+client/timedchromepolicy/connect.lock
+client/timedchromepolicy/coverage
+client/timedchromepolicy/libpeerconnection.log
+client/timedchromepolicy/npm-debug.log
+client/timedchromepolicy/yarn-error.log
+client/timedchromepolicy/testem.log
+client/timedchromepolicy/typings
