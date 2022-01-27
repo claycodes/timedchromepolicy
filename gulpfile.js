@@ -35,14 +35,6 @@ function buildClient(cb) {
     });
 }
 
-function setFirebaseEnvironment(cb){
-    exec(`firebase functions:config:set application.project==${PROJECT_NAME}`, (err, stdout, stderr) => {
-        console.log(stdout);
-        console.error(stderr);
-        cb(err);
-    });
-}
-
 function copyClientFiles(cb) {
     src([`./client/${APP_NAME}/dist/${APP_NAME}/*.js`, `./client/${APP_NAME}/dist/${APP_NAME}/*.css`])
         .pipe(dest('deploy/public/assets/scripts'));
@@ -114,12 +106,10 @@ function cleanBuild(cb) {
 }
 
 
-// exports.default = defaultTask;
-// exports.clean_build = cleanBuild;
-exports.deploy = parallel(setFirebaseEnvironment, deployStaticAssets, deployWebapp);
+
+exports.deploy = parallel(deployStaticAssets, deployWebapp);
 
 exports.build = series(cleanBuild, wait, processServerFiles, processManifest, buildClient,
     copyClientFiles, processClientAssetFiles, processClientOtherFiles, buildClientLoadPage);
 
-// exports.deploy_static = deployStaticAssets;
 exports.deploy_server = series(cleanBuild, wait, processServerFiles, processManifest, deployWebapp );
