@@ -1,12 +1,12 @@
 # Chrome Timed Policies
 
-This project is intended to display the source code for Timed Chrome Policies. It can be used as an addon to trigger chrome policy changes by orgunit at specific times. It will also generate the relevant GAM commands. 
+Timed Chrome Policy is developed to provide timed triggers for Chrome OS policies. It can be used as an addon to trigger chrome policy changes by orgunit at specific times. It will also generate the relevant GAM commands. 
 
 To use this repo:
 
 clone the repository
 ```
-git clone <repo> <directory>
+git clone https://github.com/claycodes/timedchromepolicy.git
 ```
 
 navigate to the installation directory
