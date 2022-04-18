@@ -17,7 +17,7 @@ function hourlyCheck() {
   const sheets = ss.getSheets()
   const headlan = headerObj[lan]
 
-  const policyrequests = [] 
+  const policyrequests = []
 
   sheets.forEach(sheet => {
     const [head, ...data] = sheet.getDataRange().getValues()
@@ -33,11 +33,23 @@ function hourlyCheck() {
     const activeData = data.filter(row => row[head.indexOf(headlan.active) + 1])
     console.log(activeData)
     activeData.forEach(row => {
-      const nxt = nextTrigger(row[head.indexOf(headlan.freqUnit) + 1], row[head.indexOf(headlan.freqValue1) + 1], row[head.indexOf(headlan.freqValue2) + 1], row[head.indexOf(headlan.lastUpdate) + 1])
+      console.log('nextTrigger Input','freqUnit',headlan.freqUnit,head.indexOf(headlan.freqUnit),row[head.indexOf(headlan.freqUnit)+1],'freqValue1',headlan.freqValue1, head.indexOf(headlan.freqValue1),row[head.indexOf(headlan.freqValue1)+1],'freqValue2',headlan.freqValue2, head.indexOf(headlan.freqValue2),row[head.indexOf(headlan.freqValue2)+1], 'lastUpdate',headlan.lastUpdate,head.indexOf(headlan.lastUpdate),row[head.indexOf(headlan.lastUpdate)+1])
+      
+      const nxt = nextTrigger(row[head.indexOf(headlan.freqUnit)+1], row[head.indexOf(headlan.freqValue1)+1], row[head.indexOf(headlan.freqValue2)+1], row[head.indexOf(headlan.lastUpdate)+1])
 
+console.log('nxt',nxt)
+      let runrow = !nxt ? true : (nxt.getTime() <= new Date().getTime() - 2000 ) && row[head.indexOf(headlan.freqUnit)+1].toString().toLowerCase()!=freq[lan].specific.toLowerCase()
 
-      const runrow = !nxt ? true : nxt.getTime() <= new Date().getTime() - 2000
+      if(row[head.indexOf(headlan.freqUnit)+1].toString().toLowerCase()==freq[lan].specific.toLowerCase()){
+        //if the last run is next than the nxt and now is greater than nxt
+        const last = new Date(row[head.indexOf(headlan.lastUpdate)+1])
+        console.log('specific', last<nxt)
+        if(last<nxt && nxt<new Date()){
+          runrow=true
+        }
+      }
 
+    console.log(runrow)
       if (runrow) {
         let orgids = row[head.indexOf(headlan.orgIds) + 1]
         let schema = row[head.indexOf(headlan.policyName) + 1]
@@ -136,9 +148,9 @@ function editListener(e) {
     }
 
 
-
     if (head == headlan.freqUnit) {
       processingToast()
+
       const valueCol1 = headers.indexOf(headlan.freqValue1) + 1
       const valueCol2 = headers.indexOf(headlan.freqValue2) + 1
       const range1 = sheet.getRange(e.range.getRowIndex(), valueCol1)
@@ -152,7 +164,8 @@ function editListener(e) {
         sheet.getRange(e.range.getRowIndex(), valueCol2).clear()
         return
       }
-      const unitsArray = object.values(units[lan])
+      const unitsArray = Object.keys(units[lan])
+
       unitsArray.indexOf(e.value)
       if (unitsArray.indexOf(e.value) < 4) {
         setDropdown(units[lan][e.value], range1)
@@ -164,12 +177,16 @@ function editListener(e) {
 
     if (head == headlan.freqValue1) {
       processingToast()
+      const typeCol = headers.indexOf(headlan.freqUnit) + 1
       const valueCol1 = headers.indexOf(headlan.freqValue1) + 1
       const valueCol2 = headers.indexOf(headlan.freqValue2) + 1
+      const typeRange= sheet.getRange(e.range.getRowIndex(), typeCol)
       const range1 = sheet.getRange(e.range.getRowIndex(), valueCol1)
       const range2 = sheet.getRange(e.range.getRowIndex(), valueCol2)
 
-      if (unitsArray.indexOf(range1.getValue()) >= 2 && unitsArray.indexOf(range1.getValue()) <= 3) {
+      const unitsArray = Object.keys(units[lan])
+  
+      if (unitsArray.indexOf(typeRange.getValue()) >= 2 && unitsArray.indexOf(typeRange.getValue()) <= 3) {
         setDropdown(units[lan]['Daily'], range2)
       } else {
         range2.setValue('n/a')
@@ -183,34 +200,36 @@ function editListener(e) {
 }
 
 function test_nextTrigger() {
-  const lastRun = ''
-  const test1 = { unit: 'Hourly', value1: 2, value2: '' }
-  console.log('Hourly', nextTrigger(test1.unit, test1.value1, test1.value2, lastRun))
-  const test2 = { unit: 'Daily', value1: 15, value2: '' }
-  console.log('Daily', nextTrigger(test2.unit, test2.value1, test2.value2, lastRun))
-  const test3 = { unit: 'Weekly', value1: 'Monday', value2: '7PM' }
-  console.log('Weekly', nextTrigger(test3.unit, test3.value1, test3.value2, lastRun))
-  const test4 = { unit: 'Monthly', value1: 10, value2: '6am' }
-  console.log('Monthly', nextTrigger(test4.unit, test4.value1, test4.value2, lastRun))
-  const test5 = { unit: 'Specific Date', value1: '1/22/22', value2: '4pm' }
-  console.log('Specific Date', nextTrigger(test5.unit, test5.value1, test5.value2, lastRun))
+  const lastRun = '4/13/22'
+  // const test1 = { unit: 'Hourly', value1: 2, value2: '' }
+  // console.log('Hourly', nextTrigger(test1.unit, test1.value1, test1.value2, lastRun))
+  // const test2 = { unit: 'Daily', value1: 15, value2: '' }
+  // console.log('Daily', nextTrigger(test2.unit, test2.value1, test2.value2, lastRun))
+  // const test3 = { unit: 'Weekly', value1: 'Monday', value2: '7PM' }
+  // console.log('Weekly', nextTrigger(test3.unit, test3.value1, test3.value2, lastRun))
+  // const test4 = { unit: 'Monthly', value1: 10, value2: '6am' }
+  // console.log('Monthly', nextTrigger(test4.unit, test4.value1, test4.value2, lastRun))
+   const test5 = { unit: 'Specific Date', value1: '1/22/22', value2: '4pm' }
+  console.log('Specific DateA', nextTrigger(test5.unit, test5.value1, test5.value2, lastRun))
 
 }
 
 
 function nextTrigger(unit, value1, value2, lastRun) {
+  console.log(unit, value1, value2, lastRun)
   if (!lastRun) {
     return null
   } else {
     lastRun = new Date(lastRun)
   }
   let nextTime
-
+  console.log('freq', freq[lan])
   switch (unit) {
     case freq[lan].hourly:
       nextTime = nextHour(lastRun, value1)
       break;
     case freq[lan].daily:
+      console.log('Daily', lastRun,value1)
       nextTime = nextDay(lastRun, value1)
       break;
     case freq[lan].weekly:
@@ -232,6 +251,7 @@ function nextHour(last, value) {
 
 function nextDay(last, value) {
   const num = timeNumber(value)
+  last = new Date(last)
   last.setDate(last.getDate() + 1)
   return new Date(last.setHours(num))
 }
@@ -260,11 +280,16 @@ function nextMonth(last, value1, value2) {
 }
 
 function onDate(value1, value) {
+  console.log(value1, value)
   const num = timeNumber(value)
   return new Date(new Date(value1).setHours(num))
 }
 
 function timeNumber(value) {
+  console.log(value)
+   if(typeof value=='object'){
+        value=value.getHours()
+    }
   value = value ? value : `12${timeSuffix[lan].defaultSuffix}`
   let num = value
   if (typeof value == 'string') {
