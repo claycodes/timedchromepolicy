@@ -56,6 +56,8 @@ Connect your appscript to GCP and enable all the apis
 [Chrome Policy API](https://console.cloud.google.com/apis/api/chromepolicy.googleapis.com/overview)
 [Admin SDK API](https://console.cloud.google.com/apis/api/admin.googleapis.com/overview)
 [Cloud Run API](https://console.cloud.google.com/apis/api/runtimeconfig.googleapis.com/overview)
+
+Or Install the Add On. 
 [Marketplace Add On](https://workspace.google.com/marketplace/app/timed_policy_for_chrome_os/11661963343)
 
 
